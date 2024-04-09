@@ -29,7 +29,7 @@ namespace LeaderBoard.API
             services.AddScoped<IScoreService, UserScoreService>();
             services.AddScoped<DBContext>();
 
-            string connectionString = Configuration.GetConnectionString("DefaultConnection:ConnectionString");
+            string connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddTransient<IDbConnection>(sp => new SqlConnection(connectionString));
         }
 

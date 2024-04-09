@@ -28,8 +28,8 @@ namespace LeaderBoard.API.Controllers
             }
         }
 
-        [HttpGet("GetScoresByDay/{scoreDate}")]
-        public async Task<IActionResult> GetScoresByDay(DateTime scoreDate)
+        [HttpGet("GetScoresByDay")]
+        public async Task<IActionResult> GetScoresByDay([FromQuery]int scoreDate)
         {
             try
             {
@@ -42,8 +42,8 @@ namespace LeaderBoard.API.Controllers
             }
         }
 
-        [HttpGet("GetScoresByMonth/{month}")]
-        public async Task<IActionResult> GetScoresByMonth([FromQuery] DateTime month)
+        [HttpGet("GetScoresByMonth")]
+        public async Task<IActionResult> GetScoresByMonth([FromQuery] int month)
         {
             try
             {

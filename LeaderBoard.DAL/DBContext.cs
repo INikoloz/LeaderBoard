@@ -15,7 +15,7 @@ namespace LeaderBoard.DAL
 
         public async Task<IDbConnection> CreateConnectionAsync()
         {
-            var connectionString = _configuration.GetConnectionString("DefaultConnection:ConnectionString");
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
             using (var connection = new SqlConnection(connectionString))
             {
                 await connection.OpenAsync();

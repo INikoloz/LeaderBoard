@@ -28,16 +28,18 @@ namespace LeaderBoard.Application.Concrete
       
         }   
 
-        public async Task<IEnumerable<ScoreResponse>> GetScoresByDayAsync(DateTime day)
+        public async Task<IEnumerable<ScoreResponse>> GetScoresByDayAsync(int day)
         {
-            return await _scoreRepository.GetUserScoresByDayAsync(day);
+            var date = new DateTime( DateTime.Now.Year, DateTime.Now.Month,day);
+            return await _scoreRepository.GetUserScoresByDayAsync(date);
 
       
         }
 
-        public async Task<IEnumerable<ScoreResponse>> GetScoresByMonthAsync(DateTime month)
+        public async Task<IEnumerable<ScoreResponse>> GetScoresByMonthAsync(int month)
         {
-            return await _scoreRepository.GetUserScoresByMonthAsync(month);
+            var date = new DateTime(DateTime.Now.Year, month, DateTime.Now.Day);
+            return await _scoreRepository.GetUserScoresByMonthAsync(date);
            
         }
 

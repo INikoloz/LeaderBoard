@@ -78,7 +78,11 @@ namespace LeaderBoard.DAL.Repositories
                 catch (Exception ex)
                 {
 
-                    throw new Exception(ex.Message); 
+                    throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    await _dbConnection.CloseConnectionAsync(connection);
                 }   
             }
         }
@@ -114,6 +118,10 @@ namespace LeaderBoard.DAL.Repositories
                 {
 
                     throw new Exception(ex.Message);
+                }
+                finally
+                {
+                    await _dbConnection.CloseConnectionAsync(connection);
                 }             
             }
         }
