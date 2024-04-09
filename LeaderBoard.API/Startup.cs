@@ -1,6 +1,7 @@
 ﻿using LeaderBoard.Abstraction.Repositories;
 using LeaderBoard.Application.Abstract;
 using LeaderBoard.Application.Concrete;
+using LeaderBoard.DAL;
 using LeaderBoard.DAL.Repositories;
 using System.Data;
 using System.Data.SqlClient;
@@ -26,8 +27,9 @@ namespace LeaderBoard.API
             services.AddScoped<IUserScoreRepository, ScoreRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IScoreService, UserScoreService>();
+            services.AddScoped<DBContext>();
 
-            string connectionString = Configuration.GetConnectionString("DefaultConnection");
+            string connectionString = Configuration.GetConnectionString("DefaultConnection:ConnectionString");
             services.AddTransient<IDbConnection>(sp => new SqlConnection(connectionString));
         }
 

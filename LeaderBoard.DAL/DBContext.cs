@@ -7,24 +7,29 @@ namespace LeaderBoard.DAL
     public class DBContext
     {
         private readonly IConfiguration _configuration;
-        private readonly string _connectionString;
 
         public DBContext(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = _configuration.GetConnectionString("DefaultConnection");
         }
 
         public async Task<IDbConnection> CreateConnectionAsync()
         {
-            var connection = new SqlConnection(_connectionString);
-            await connection.OpenAsync();
-            return connection;
+            var connectionString = _configuration.GetConnectionString("DefaultConnection:ConnectionString");
+            using (var connection = new SqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+                return connection;
+            }
         }
 
         public async Task CloseConnectionAsync(IDbConnection connection)
         {
-            await ((SqlConnection)connection).CloseAsync();
+            if (connection != null && connection.State != ConnectionState.Closed)
+            {
+                await ((SqlConnection)connection).CloseAsync();
+                connection.Dispose();
+            }
         }
     }
 }
