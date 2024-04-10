@@ -1,4 +1,4 @@
-﻿namespace LeaderBoard.Application.DTO
+﻿namespace LeaderBoard.Application.RequestModels
 {
     public class UploadUserDataRequest
     {

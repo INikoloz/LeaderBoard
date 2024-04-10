@@ -1,8 +1,8 @@
-﻿using LeaderBoard.Abstraction.Repositories;
-using LeaderBoard.Application.Abstract;
-using LeaderBoard.Application.DTO;
-using LeaderBoard.Domain.Models;
-using LeaderBoard.Domain.ResponseModels;
+﻿using LeaderBoard.Application.Abstract;
+using LeaderBoard.Application.Models;
+using LeaderBoard.Application.Repositories;
+using LeaderBoard.Application.RequestModels;
+using LeaderBoard.Application.ResponseModels;
 
 namespace LeaderBoard.Application.Concrete
 {
@@ -29,10 +29,10 @@ namespace LeaderBoard.Application.Concrete
             return ValueTask.CompletedTask; 
         }
 
-        public async Task<UserInfoDto> GetUserScoreInfoAsync(int userId)
+        public async Task<UserInfoResponseModel> GetUserScoreInfoAsync(int userId)
         {
            var result = await _userRepository.GetUserInfoAsync(userId);
-           return new UserInfoDto
+           return new UserInfoResponseModel
            {
                UserId = result.UserId,
                MonthlyScore = result.MonthlyScore,
@@ -41,7 +41,7 @@ namespace LeaderBoard.Application.Concrete
            };
         }
 
-        public async Task<IEnumerable<AllDataResponse>> GetAllUserDataAsync()
+        public async Task<IEnumerable<AllUserDataResponseModel>> GetAllUserDataAsync()
         {
             var result = await _userRepository.GetAllDataAsync();
             if (!result.Any()) throw new Exception("");

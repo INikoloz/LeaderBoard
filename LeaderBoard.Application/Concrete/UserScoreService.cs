@@ -1,8 +1,8 @@
-﻿using LeaderBoard.Abstraction.Repositories;
-using LeaderBoard.Application.Abstract;
-using LeaderBoard.Application.DTO;
-using LeaderBoard.Domain.Models;
-using LeaderBoard.Domain.ResponseModels;
+﻿using LeaderBoard.Application.Abstract;
+using LeaderBoard.Application.Models;
+using LeaderBoard.Application.Repositories;
+using LeaderBoard.Application.RequestModels;
+using LeaderBoard.Application.ResponseModels;
 
 namespace LeaderBoard.Application.Concrete
 {
@@ -28,12 +28,12 @@ namespace LeaderBoard.Application.Concrete
       
         }
 
-        public async Task<IEnumerable<ScoreResponse>> GetScoresByDayAsync(int day)
+        public async Task<IEnumerable<ScoreResponseModel>> GetScoresByDayAsync(int day)
         {
             var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, day);
             var scores = await _scoreRepository.GetUserScoresByDayAsync(date);
 
-            var response = scores.Select(s => new ScoreResponse
+            var response = scores.Select(s => new ScoreResponseModel
             {
                 UserId = s.UserId,
                 UserName = s.UserName,
@@ -43,14 +43,14 @@ namespace LeaderBoard.Application.Concrete
             return response;
         }
 
-        public async Task<IEnumerable<ScoreResponse>> GetScoresByMonthAsync(int month)
+        public async Task<IEnumerable<ScoreResponseModel>> GetScoresByMonthAsync(int month)
         {
             var date = new DateTime(DateTime.Now.Year, month, DateTime.Now.Day);
             return await _scoreRepository.GetUserScoresByMonthAsync(date);
            
         }
 
-        public async Task<StatsResponse> GetStatsAsync()
+        public async Task<StatsResponseModel> GetStatsAsync()
         {
             return await _scoreRepository.GetTopStatsAsync();
            

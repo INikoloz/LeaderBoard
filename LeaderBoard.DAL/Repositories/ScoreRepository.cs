@@ -1,7 +1,7 @@
 ﻿using Dapper;
-using LeaderBoard.Abstraction.Repositories;
-using LeaderBoard.Domain.Models;
-using LeaderBoard.Domain.ResponseModels;
+using LeaderBoard.Application.Models;
+using LeaderBoard.Application.Repositories;
+using LeaderBoard.Application.ResponseModels;
 
 namespace LeaderBoard.DAL.Repositories
 {
@@ -34,7 +34,7 @@ namespace LeaderBoard.DAL.Repositories
             }
         }
 
-        public async Task<IEnumerable<ScoreResponse>> GetUserScoresByDayAsync(DateTime date)
+        public async Task<IEnumerable<ScoreResponseModel>> GetUserScoresByDayAsync(DateTime date)
         {
             using (var connection = await _dbConnection.CreateConnectionAsync())
             {
@@ -55,7 +55,7 @@ namespace LeaderBoard.DAL.Repositories
                     var startDate = date;
                     var endDate = date.AddDays(1).Date;
 
-                    var scores = await connection.QueryAsync<ScoreResponse>(query, new { StartDate = startDate, EndDate = endDate });
+                    var scores = await connection.QueryAsync<ScoreResponseModel>(query, new { StartDate = startDate, EndDate = endDate });
                     return scores;
                 }
                 catch (Exception ex)
@@ -70,7 +70,7 @@ namespace LeaderBoard.DAL.Repositories
             }
         }
 
-        public async Task<IEnumerable<ScoreResponse>> GetUserScoresByMonthAsync(DateTime month)
+        public async Task<IEnumerable<ScoreResponseModel>> GetUserScoresByMonthAsync(DateTime month)
         {
             using (var connection = await _dbConnection.CreateConnectionAsync())
             {
@@ -91,7 +91,7 @@ namespace LeaderBoard.DAL.Repositories
                     var startDate = new DateTime(month.Year, month.Month, 1);
                     var endDate = startDate.AddMonths(1).AddDays(-1);
 
-                    var scores = await connection.QueryAsync<ScoreResponse>(query, new { StartDate = startDate, EndDate = endDate });
+                    var scores = await connection.QueryAsync<ScoreResponseModel>(query, new { StartDate = startDate, EndDate = endDate });
                     return scores;
                 }
                 catch (Exception ex)
@@ -106,7 +106,7 @@ namespace LeaderBoard.DAL.Repositories
             }
         }
 
-        public async Task<StatsResponse> GetTopStatsAsync()
+        public async Task<StatsResponseModel> GetTopStatsAsync()
         {
             using (var connection = await _dbConnection.CreateConnectionAsync())
             {
@@ -130,7 +130,7 @@ namespace LeaderBoard.DAL.Repositories
 
                 try
                 {
-                    var stats = await connection.QuerySingleAsync<StatsResponse>(query);
+                    var stats = await connection.QuerySingleAsync<StatsResponseModel>(query);
                     return stats;
                 }
                 catch (Exception ex)

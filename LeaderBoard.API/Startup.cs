@@ -1,6 +1,6 @@
-﻿using LeaderBoard.Abstraction.Repositories;
-using LeaderBoard.Application.Abstract;
+﻿using LeaderBoard.Application.Abstract;
 using LeaderBoard.Application.Concrete;
+using LeaderBoard.Application.Repositories;
 using LeaderBoard.DAL;
 using LeaderBoard.DAL.Repositories;
 using System.Data;
