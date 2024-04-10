@@ -29,8 +29,13 @@ namespace LeaderBoard.API
             services.AddScoped<IScoreService, UserScoreService>();
             services.AddScoped<DBContext>();
 
-            string connectionString = Configuration.GetConnectionString("DefaultConnection");
-            services.AddTransient<IDbConnection>(sp => new SqlConnection(connectionString));
+            services.AddTransient<IDbConnection>(sp =>
+            {
+                var configuration = sp.GetRequiredService<IConfiguration>();
+                return sp.GetRequiredService<DBContext>().CreateConnectionAsync().Result;
+            });
+
+            services.AddTransient<SqlConnection>(sp => sp.GetRequiredService<DBContext>().CreateConnectionAsync().Result);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

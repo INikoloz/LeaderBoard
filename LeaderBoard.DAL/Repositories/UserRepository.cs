@@ -29,6 +29,10 @@ namespace LeaderBoard.DAL.Repositories
                 {
                     throw new Exception($"Duplicate usernames found: {string.Join(", ", users.Where(u => ex.Message.Contains(u.Username)).Select(u => u.Username))}", ex);
                 }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
                 finally
                 {
                     await _dbContext.CloseConnectionAsync(connection);
@@ -47,7 +51,7 @@ namespace LeaderBoard.DAL.Repositories
                                 u.Username,
                                 s.Score
                             FROM Users u
-                            LEFT JOIN Scores s ON u.Id = s.UserId
+                            LEFT JOIN UserScores s ON u.Id = s.UserId
                             ORDER BY u.Id, s.Date DESC";
 
                     var data = await connection.QueryAsync<AllDataResponse>(query);
@@ -97,23 +101,27 @@ namespace LeaderBoard.DAL.Repositories
         {
             using (var connection = await _dbContext.CreateConnectionAsync())
             {
+             
+
                 var query = @"
-                            WITH UserScores AS (
-                                SELECT
-                                    s.UserId,
-                                    SUM(s.Score) AS MonthlyScore,
-                                    DENSE_RANK() OVER (ORDER BY SUM(s.Score) DESC) AS Position
-                                FROM Scores s
-                                WHERE s.Date BETWEEN @StartDate AND @EndDate
-                                GROUP BY s.UserId
-                            )
                             SELECT
                                 u.Id AS UserId,
                                 u.Username,
-                                us.Position,
-                                us.MonthlyScore
+                                (
+                                    SELECT
+                                        DENSE_RANK() OVER (ORDER BY SUM(s.Score) DESC)
+                                    FROM UserScores s
+                                    WHERE s.UserId = u.Id
+                                        AND s.Date BETWEEN @StartDate AND @EndDate
+                                ) AS Position,
+                                (
+                                    SELECT
+                                        SUM(s.Score)
+                                    FROM UserScores s
+                                    WHERE s.UserId = u.Id
+                                        AND s.Date BETWEEN @StartDate AND @EndDate
+                                ) AS MonthlyScore
                             FROM Users u
-                            LEFT JOIN UserScores us ON u.Id = us.UserId
                             WHERE u.Id = @UserId";
 
                 try
@@ -126,15 +134,12 @@ namespace LeaderBoard.DAL.Repositories
                 }
                 catch (Exception ex)
                 {
-
-                    throw new Exception(ex.Message);
+                    throw new Exception(ex.Message, ex);
                 }
                 finally
                 {
                     await _dbContext.CloseConnectionAsync(connection);
                 }
-
-               
             }
         }
     }

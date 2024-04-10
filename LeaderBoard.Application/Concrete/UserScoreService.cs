@@ -24,16 +24,23 @@ namespace LeaderBoard.Application.Concrete
                 Score = s.Score
             }).ToArray();
 
-           var ScoreEntity =  await _scoreRepository.AddUserScoreAsync(scoreEntities);
+            await _scoreRepository.AddUserScoreAsync(scoreEntities);
       
-        }   
+        }
 
         public async Task<IEnumerable<ScoreResponse>> GetScoresByDayAsync(int day)
         {
-            var date = new DateTime( DateTime.Now.Year, DateTime.Now.Month,day);
-            return await _scoreRepository.GetUserScoresByDayAsync(date);
+            var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, day);
+            var scores = await _scoreRepository.GetUserScoresByDayAsync(date);
 
-      
+            var response = scores.Select(s => new ScoreResponse
+            {
+                UserId = s.UserId,
+                UserName = s.UserName,
+                TotalScore = s.TotalScore
+            });
+
+            return response;
         }
 
         public async Task<IEnumerable<ScoreResponse>> GetScoresByMonthAsync(int month)

@@ -13,14 +13,12 @@ namespace LeaderBoard.DAL
             _configuration = configuration;
         }
 
-        public async Task<IDbConnection> CreateConnectionAsync()
+        public async Task<SqlConnection> CreateConnectionAsync()
         {
             var connectionString = _configuration.GetConnectionString("DefaultConnection");
-            using (var connection = new SqlConnection(connectionString))
-            {
-                await connection.OpenAsync();
-                return connection;
-            }
+            var connection = new SqlConnection(connectionString);
+            await connection.OpenAsync();
+            return connection;
         }
 
         public async Task CloseConnectionAsync(IDbConnection connection)

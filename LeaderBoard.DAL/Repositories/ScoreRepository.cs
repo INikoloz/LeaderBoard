@@ -13,9 +13,25 @@ namespace LeaderBoard.DAL.Repositories
         {
             _dbConnection = dbConnection;
         }
-        public Task<UserScore> AddUserScoreAsync(UserScore[] userScore)
+        public async Task AddUserScoreAsync(UserScore[] userScores)
         {
-            throw new NotImplementedException();
+            var query = "INSERT INTO UserScores (UserId, Score, Date) VALUES (@UserId, @Score, @Date)";
+
+            using (var connection = await _dbConnection.CreateConnectionAsync())
+            {
+                try
+                {
+                    await connection.ExecuteAsync(query, userScores);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message, ex);
+                }
+                finally
+                {
+                    await _dbConnection.CloseConnectionAsync(connection);
+                }
+            }
         }
 
         public async Task<IEnumerable<ScoreResponse>> GetUserScoresByDayAsync(DateTime date)
@@ -29,18 +45,21 @@ namespace LeaderBoard.DAL.Repositories
                                 u.Id AS UserId,
                                 u.Username,
                                 SUM(s.Score) AS TotalScore
-                            FROM Scores s
+                            FROM UserScores s
                             JOIN Users u ON s.UserId = u.Id
-                            WHERE s.Date = @Date
+                            WHERE s.Date BETWEEN @StartDate AND @EndDate
                             GROUP BY u.Id, u.Username
-                            ORDER BY TotalScore DESC";
+                            ORDER BY TotalScore DESC"
+                    ;
 
-                    var scores = await connection.QueryAsync<ScoreResponse>(query, new { Date = date });
+                    var startDate = date;
+                    var endDate = date.AddDays(1).Date;
+
+                    var scores = await connection.QueryAsync<ScoreResponse>(query, new { StartDate = startDate, EndDate = endDate });
                     return scores;
                 }
                 catch (Exception ex)
                 {
-
                     throw new Exception(ex.Message);
                 }
                 finally
@@ -61,7 +80,7 @@ namespace LeaderBoard.DAL.Repositories
                                 u.Id AS UserId,
                                 u.Username,
                                 SUM(s.Score) AS TotalScore
-                            FROM Scores s
+                            FROM UserScores s
                             JOIN Users u ON s.UserId = u.Id
                             WHERE s.Date BETWEEN @StartDate AND @EndDate
                             GROUP BY u.Id, u.Username
@@ -104,7 +123,7 @@ namespace LeaderBoard.DAL.Repositories
                                     SUM(s.Score) AS TotalScore,
                                     SUM(SUM(s.Score)) OVER (PARTITION BY DATEPART(WEEK, s.Date), u.Id) AS TotalWeeklyScore,
                                     SUM(SUM(s.Score)) OVER (PARTITION BY DATEPART(MONTH, s.Date), u.Id) AS TotalMonthlyScore
-                                FROM Scores s
+                                FROM UserScores s
                                 JOIN Users u ON s.UserId = u.Id
                                 GROUP BY s.Date, u.Id
                             ) t";
