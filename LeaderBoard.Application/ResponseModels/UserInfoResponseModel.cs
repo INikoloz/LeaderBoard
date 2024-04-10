@@ -1,6 +1,6 @@
-﻿namespace LeaderBoard.Application.DTO
+﻿namespace LeaderBoard.Application.ResponseModels
 {
-    public class UserInfoDto
+    public class UserInfoResponseModel
     {
         public int UserId { get; set; }
         public string Username { get; set; }

@@ -1,12 +1,12 @@
-﻿using LeaderBoard.Application.DTO;
-using LeaderBoard.Domain.ResponseModels;
+﻿using LeaderBoard.Application.RequestModels;
+using LeaderBoard.Application.ResponseModels;
 
 namespace LeaderBoard.Application.Abstract
 {
     public interface IUserService
     {
-        Task<UserInfoDto> GetUserScoreInfoAsync(int userId);
+        Task<UserInfoResponseModel> GetUserScoreInfoAsync(int userId);
         Task<ValueTask> UploadUserDataAsync(UploadUserDataRequest[] users);
-        Task<IEnumerable<AllDataResponse>> GetAllUserDataAsync();
+        Task<IEnumerable<AllUserDataResponseModel>> GetAllUserDataAsync();
     }
 }

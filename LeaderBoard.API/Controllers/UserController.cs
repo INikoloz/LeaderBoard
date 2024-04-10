@@ -1,5 +1,5 @@
 ﻿using LeaderBoard.Application.Abstract;
-using LeaderBoard.Application.DTO;
+using LeaderBoard.Application.RequestModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LeaderBoard.API.Controllers

@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LeaderBoard.Abstraction\LeaderBoard.Abstraction.csproj" />
+    <ProjectReference Include="..\LeaderBoard.Application\LeaderBoard.Application.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using Dapper;
-using LeaderBoard.Abstraction.Repositories;
-using LeaderBoard.Domain.Models;
-using LeaderBoard.Domain.ResponseModels;
+using LeaderBoard.Application.Models;
+using LeaderBoard.Application.Repositories;
+using LeaderBoard.Application.ResponseModels;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -39,7 +39,7 @@ namespace LeaderBoard.DAL.Repositories
                 }
             }
         }
-        public async Task<IEnumerable<AllDataResponse>> GetAllDataAsync()
+        public async Task<IEnumerable<AllUserDataResponseModel>> GetAllDataAsync()
         {
             using (var connection = await _dbContext.CreateConnectionAsync())
             {
@@ -54,7 +54,7 @@ namespace LeaderBoard.DAL.Repositories
                             LEFT JOIN UserScores s ON u.Id = s.UserId
                             ORDER BY u.Id, s.Date DESC";
 
-                    var data = await connection.QueryAsync<AllDataResponse>(query);
+                    var data = await connection.QueryAsync<AllUserDataResponseModel>(query);
                     return data;
                 }
                 catch (Exception ex )
@@ -97,7 +97,7 @@ namespace LeaderBoard.DAL.Repositories
             }
         }
 
-        public async Task<UserInfoResponse> GetUserInfoAsync(int userId)
+        public async Task<UserInfoResponseModel> GetUserInfoAsync(int userId)
         {
             using (var connection = await _dbContext.CreateConnectionAsync())
             {
@@ -129,8 +129,8 @@ namespace LeaderBoard.DAL.Repositories
                     var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
                     var endDate = startDate.AddMonths(1).AddDays(-1);
 
-                    var userInfo = await connection.QuerySingleOrDefaultAsync<UserInfoResponse>(query, new { UserId = userId, StartDate = startDate, EndDate = endDate });
-                    return userInfo ?? new UserInfoResponse { UserId = userId };
+                    var userInfo = await connection.QuerySingleOrDefaultAsync<UserInfoResponseModel>(query, new { UserId = userId, StartDate = startDate, EndDate = endDate });
+                    return userInfo ?? new UserInfoResponseModel { UserId = userId };
                 }
                 catch (Exception ex)
                 {
