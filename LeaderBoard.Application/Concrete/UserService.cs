@@ -15,7 +15,7 @@ namespace LeaderBoard.Application.Concrete
             _userRepository = userRepository;
         }
 
-        public async Task<ValueTask> UploadUserDataAsync(UserDto[] users)
+        public async Task<ValueTask> UploadUserDataAsync(UploadUserDataRequest[] users)
         {
             var userEntities = users.Select(u => new User
             {

@@ -7,7 +7,7 @@ namespace LeaderBoard.Application.Abstract
     {
         Task<IEnumerable<ScoreResponse>> GetScoresByDayAsync(int Day);
         Task<IEnumerable<ScoreResponse>> GetScoresByMonthAsync(int month);
-        Task UploadUserScoresAsync(ScoreDto[] scores);
+        Task UploadUserScoresAsync(UploadUserScoreRequest[] scores);
         Task<StatsResponse> GetStatsAsync();
     }
 }

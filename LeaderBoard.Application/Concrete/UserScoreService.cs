@@ -15,7 +15,7 @@ namespace LeaderBoard.Application.Concrete
             _scoreRepository = scoreRepository;
         }
 
-        public async Task UploadUserScoresAsync(ScoreDto[] scores)
+        public async Task UploadUserScoresAsync(UploadUserScoreRequest[] scores)
         {       
             var scoreEntities = scores.Select(s => new UserScore
             {

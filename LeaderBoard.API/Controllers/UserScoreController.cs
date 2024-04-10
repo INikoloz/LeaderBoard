@@ -5,7 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace LeaderBoard.API.Controllers
 {
     [Route("api/UserScore")]
-    public class UserScoreController : BaseApiController
+    [ApiController]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public class UserScoreController : ControllerBase
     {
         private readonly IScoreService _scoreService;
 
@@ -15,7 +22,7 @@ namespace LeaderBoard.API.Controllers
         }
 
         [HttpPost("UploadUserScores")]
-        public async Task<IActionResult> UploadUserScores([FromBody] ScoreDto[] scores)
+        public async Task<IActionResult> UploadUserScores([FromBody] UploadUserScoreRequest[] scores)
         {
             try
             {

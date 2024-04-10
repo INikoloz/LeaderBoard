@@ -1,6 +1,6 @@
 ﻿namespace LeaderBoard.Application.DTO
 {
-    public class ScoreDto
+    public class UploadUserScoreRequest
     {
         public int UserId { get; set; }
         public DateTime Date { get; set; }

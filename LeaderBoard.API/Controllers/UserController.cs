@@ -5,7 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace LeaderBoard.API.Controllers
 {
     [Route("api/User")]
-    public class UserController : BaseApiController
+    [ApiController]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
 
@@ -15,7 +22,7 @@ namespace LeaderBoard.API.Controllers
         }
 
         [HttpPost("UploadUserData")]
-        public async Task<IActionResult> UploadUserData([FromBody] UserDto[] users)
+        public async Task<IActionResult> UploadUserData([FromBody] UploadUserDataRequest [] users)
         {
             try
             {
